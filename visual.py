@@ -1,3 +1,4 @@
+import numpy as np
 import pygame
 
 import main
@@ -10,7 +11,13 @@ RED = (255, 0, 0)
 LEFT = main.LEFT
 BLACK = main.BLACK
 blockSize = 20
-WHITE = main.WHITE
+num_of_rows = main.num_of_rows
+num_of_cols = main.num_of_cols
+max_block_pos_y = num_of_cols * blockSize
+max_block_pos_x = num_of_rows * blockSize
+BLUE = main.BLUE
+charge = main.q
+
 
 def set_charge():
     mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -28,24 +35,55 @@ def draw_all_circles(screen, circles):
 
 
 def append_hover_charge(screen, circles):
-    screen.fill(WHITE)
-    draw_grid(WINDOW_WIDTH, WINDOW_HEIGHT)
+    pos = set_charge()
+    screen.fill(BLUE)
+    draw_grid()
     draw_all_circles(screen, circles)
-    pygame.draw.circle(screen, RED_APPEND, set_charge(), blockSize // 2)
+    if 0 < pos[0] < max_block_pos_x and 0 < pos[1] < max_block_pos_y:
+        pygame.draw.circle(screen, RED_APPEND, set_charge(), blockSize // 2)
 
 
 def draw_charge():
     pos = set_charge()
-    drawn_circles.append(pos)
-    pygame.draw.circle(SCREEN, RED, pos, blockSize // 2)
+    if pos[0] < max_block_pos_x and pos[1] < max_block_pos_y:
+        drawn_circles.append(pos)
+        pygame.draw.circle(SCREEN, RED, pos, blockSize // 2)
     return True
 
 
-def draw_grid(window_width, window_height):
+def draw_grid():
     global blockSize
-    window_width = SCREEN.get_width()
-    window_height = SCREEN.get_height()
-    for x in range(0, window_width, blockSize):
-        for y in range(0, window_height, blockSize):
+    for x in range(0, num_of_rows * blockSize, blockSize):
+        for y in range(0, num_of_cols * blockSize, blockSize):
             rect = pygame.Rect(x, y, blockSize, blockSize)
             pygame.draw.rect(SCREEN, BLACK, rect, 1)
+
+
+def normalize_field(heat_field):
+    max_magnitude = np.max(heat_field)
+    if max_magnitude != 0:
+        return heat_field / max_magnitude
+    else:
+        return heat_field
+
+
+def field_to_color(value):
+    blue = (0, 0, 255)
+    red = (255, 0, 0)
+
+    r = int(blue[0] + (red[0] - blue[0]) * value)
+    g = int(blue[1] + (red[1] - blue[1]) * value)
+    b = int(blue[2] + (red[2] - blue[2]) * value)
+    return r, g, b
+
+
+def draw_heat(heat_field):
+    normalized_field = normalize_field(heat_field)
+    index = 0
+    for x in range(0, max_block_pos_x, blockSize):
+        for y in range(0, max_block_pos_y, blockSize):
+            value = normalized_field[index]
+            color = field_to_color(value)
+            print(f"color: {color}")
+            pygame.draw.rect(SCREEN, color, pygame.Rect(x, y, blockSize - 1, blockSize - 1))
+            index += 1
