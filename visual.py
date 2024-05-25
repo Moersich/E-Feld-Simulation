@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 import pygame
 
@@ -16,6 +18,7 @@ num_of_cols = main.num_of_cols
 max_block_pos_y = num_of_cols * blockSize
 max_block_pos_x = num_of_rows * blockSize
 BLUE = main.BLUE
+WHITE = main.WHITE
 charge = main.q
 
 
@@ -36,7 +39,7 @@ def draw_all_circles(screen, circles):
 
 def append_hover_charge(screen, circles):
     pos = set_charge()
-    screen.fill(BLUE)
+    screen.fill(WHITE)
     draw_grid()
     draw_all_circles(screen, circles)
     if 0 < pos[0] < max_block_pos_x and 0 < pos[1] < max_block_pos_y:
@@ -71,9 +74,17 @@ def field_to_color(value):
     blue = (0, 0, 255)
     red = (255, 0, 0)
 
-    r = int(blue[0] + (red[0] - blue[0]) * value)
-    g = int(blue[1] + (red[1] - blue[1]) * value)
-    b = int(blue[2] + (red[2] - blue[2]) * value)
+    mid = (num_of_cols + num_of_rows) / 3
+    scaling_factor = mid
+    if value != 0:
+        exponent = -0.2  # You can adjust this value to control the rate
+        scaled_value = math.pow(math.e, exponent / value * 1 / scaling_factor)
+    else:
+        scaled_value = 0
+
+    r = int(blue[0] + (red[0] - blue[0]) * scaled_value)
+    g = int(blue[1] + (red[1] - blue[1]) * scaled_value)
+    b = int(blue[2] + (red[2] - blue[2]) * scaled_value)
     return r, g, b
 
 
@@ -84,6 +95,5 @@ def draw_heat(heat_field):
         for y in range(0, max_block_pos_y, blockSize):
             value = normalized_field[index]
             color = field_to_color(value)
-            print(f"color: {color}")
             pygame.draw.rect(SCREEN, color, pygame.Rect(x, y, blockSize - 1, blockSize - 1))
             index += 1

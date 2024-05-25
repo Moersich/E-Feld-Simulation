@@ -7,11 +7,12 @@ import visual
 
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
 RED_APPEND = (255, 100, 100)
 WINDOW_HEIGHT = 400
 WINDOW_WIDTH = 400
 LEFT = 1
-num_of_rows = 50
+num_of_rows = 20
 num_of_cols = 20
 q = 1*10**(-6)
 epsilon_1 = 1
@@ -25,7 +26,7 @@ if __name__ == '__main__':
     pygame.init()
     SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
     CLOCK = pygame.time.Clock()
-    SCREEN.fill(BLUE)
+    SCREEN.fill(WHITE)
     heat_field = formeln.calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols)
     while True:
         for event in pygame.event.get():
@@ -35,7 +36,7 @@ if __name__ == '__main__':
             if event.type == pygame.VIDEORESIZE:
                 WINDOW_WIDTH, WINDOW_HEIGHT = event.w, event.h
                 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
-                SCREEN.fill(BLUE)
+                SCREEN.fill(WHITE)
                 visual.draw_grid()
             if event.type == pygame.FULLSCREEN:
                 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))

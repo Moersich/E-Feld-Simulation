@@ -9,7 +9,7 @@ blockSize = visual.blockSize
 
 def calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols):
     heat_field = np.zeros((num_of_rows, num_of_cols))
-    k = 8.9875517923e9  # Coulomb's constant in N m²/C²
+    k = 8.9875517923e9
     for x in range(num_of_rows):
         for y in range(num_of_cols):
             ex, ey = 0, 0
