@@ -36,7 +36,6 @@ if __name__ == '__main__':
             if event.type == pygame.VIDEORESIZE:
                 WINDOW_WIDTH, WINDOW_HEIGHT = event.w, event.h
                 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
-                SCREEN.fill(WHITE)
                 visual.draw_grid()
             if event.type == pygame.FULLSCREEN:
                 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -44,7 +43,6 @@ if __name__ == '__main__':
                 visual.draw_charge()
                 heat_field = formeln.calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols)
 
-        visual.append_hover_charge(SCREEN, visual.drawn_circles)
         visual.draw_heat(heat_field)
         visual.draw_grid()
         pygame.display.update()
