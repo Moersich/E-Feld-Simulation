@@ -15,7 +15,7 @@ blockSize = 20
 
 max_block_pos_y = setup.num_of_cols * blockSize
 max_block_pos_x = setup.num_of_rows * blockSize
-charge = setup.q
+charge = setup.charge
 
 
 def set_charge():
@@ -43,16 +43,23 @@ def draw_all_circles(screen, circles):
     return drawn_circles
 
 
+charges = []
+
+
 def draw_charge():
     """
     Sets and draws charge on the screen
-    :return: a boolean value to indicate if charge is drawn
+    :return: the charge value of that charge
     """
     pos = set_charge()
     if pos[0] < max_block_pos_x and pos[1] < max_block_pos_y:
         drawn_circles.append(pos)
         pygame.draw.circle(SCREEN, colors.RED, pos, blockSize // 2)
-    return True
+        charge_val = setup.charge_value()
+        charges.append(charge_val)
+        return charge_val
+    else:
+        return
 
 
 def draw_grid():
