@@ -1,5 +1,5 @@
-WINDOW_HEIGHT = 400
-WINDOW_WIDTH = 400
+WINDOW_HEIGHT = 1000
+WINDOW_WIDTH = 1000
 
 num_of_rows = 40
 num_of_cols = 40
