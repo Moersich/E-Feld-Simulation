@@ -66,14 +66,16 @@ def draw_grid():
             pygame.draw.rect(SCREEN, colors.BLACK, rect, 1)
 
 
-def normalize_field(heat_field: Matrix):
+def normalize_field(heat_field: Matrix) -> Matrix:
     """
     normalizes the heat field, to color it in :meth:`field_to_color`
     :param heat_field: the heat field to be normalized
     """
     max_magnitude = np.max(heat_field)
     if max_magnitude != 0:
-        heat_field / max_magnitude
+        return heat_field / max_magnitude
+    else:
+        return heat_field
 
 
 def field_to_color(value: float) -> Color:
@@ -89,14 +91,14 @@ def field_to_color(value: float) -> Color:
     scaling_factor = mid
     if value != 0:
         exponent = -0.2
-        scaled_value = math.pow(math.e, exponent / value * 1 / scaling_factor)
+        scaled_value = math.pow(math.e, exponent / value * .5 / scaling_factor)
     else:
-        scaled_value = 0
+        return colors.GRAY
 
-    r = int(blue[0] + (red[0] - blue[0]) * scaled_value)
-    g = int(blue[1] + (red[1] - blue[1]) * scaled_value)
-    b = int(blue[2] + (red[2] - blue[2]) * scaled_value)
-    return r, g, b
+    h = (1 - scaled_value) * 1
+    s = 1
+    l = scaled_value * .6
+    return colors.hsl_to_rgb(h, s, l)
 
 
 def draw_heat(heat_field: Matrix):
@@ -105,11 +107,11 @@ def draw_heat(heat_field: Matrix):
     :param heat_field: the heat field to be drawn
     :return:
     """
-    normalize_field(heat_field)
+    normalized_field = normalize_field(heat_field)
     index = 0
     for x in range(0, max_block_pos_x, blockSize):
         for y in range(0, max_block_pos_y, blockSize):
-            value = heat_field[index]
+            value = normalized_field[index]
             color = field_to_color(value)
             pygame.draw.rect(SCREEN, color, pygame.Rect(x, y, blockSize - 1, blockSize - 1))
             index += 1

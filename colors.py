@@ -1,10 +1,11 @@
 from pygame.color import Color
 
-BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-RED_APPEND = (255, 100, 100)
+BLACK = Color(0, 0, 0)
+BLUE = Color(0, 0, 255)
+WHITE = Color(255, 255, 255)
+RED = Color(255, 0, 0)
+RED_APPEND = Color(255, 100, 100)
+GRAY = Color(128, 128, 128)
 
 def __hue_to_rgb_value(p: float, q: float, t: float) -> float:
     if t < 0:
