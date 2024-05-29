@@ -4,12 +4,9 @@ import numpy as np
 import pygame
 
 import colors
-import input
 import setup
 
-WINDOW_WIDTH = setup.WINDOW_WIDTH
-WINDOW_HEIGHT = setup.WINDOW_HEIGHT
-SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
+SCREEN = pygame.display.set_mode((setup.WINDOW_WIDTH, setup.WINDOW_HEIGHT), pygame.RESIZABLE)
 blockSize = 20
 
 max_block_pos_y = setup.num_of_cols * blockSize
