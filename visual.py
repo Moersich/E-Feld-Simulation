@@ -4,7 +4,11 @@ import numpy as np
 import pygame
 
 import colors
+from colors import Color
+
 import setup
+
+from custom_types import Matrix
 
 SCREEN = pygame.display.set_mode((setup.WINDOW_WIDTH, setup.WINDOW_HEIGHT), pygame.RESIZABLE)
 blockSize = 20
@@ -63,27 +67,24 @@ def draw_grid():
             pygame.draw.rect(SCREEN, colors.BLACK, rect, 1)
 
 
-def normalize_field(heat_field):
+def normalize_field(heat_field: Matrix):
     """
     normalizes the heat field, to color it in :meth:`field_to_color`
     :param heat_field: the heat field to be normalized
-    :return: the normalized heat field
     """
     max_magnitude = np.max(heat_field)
     if max_magnitude != 0:
-        return heat_field / max_magnitude
-    else:
-        return heat_field
+        heat_field / max_magnitude
 
 
-def field_to_color(value):
+def field_to_color(value: float) -> Color:
     """
     Converts the field value into a color
     :param value: the value to be colored
     :return: color in r,g,b
     """
-    blue = (0, 0, 255)
-    red = (255, 0, 0)
+    blue = colors.BLUE
+    red = colors.RED
 
     mid = (setup.num_of_cols + setup.num_of_rows) / 3
     scaling_factor = mid
@@ -96,7 +97,7 @@ def field_to_color(value):
     r = int(blue[0] + (red[0] - blue[0]) * scaled_value)
     g = int(blue[1] + (red[1] - blue[1]) * scaled_value)
     b = int(blue[2] + (red[2] - blue[2]) * scaled_value)
-    return r, g, b
+    return Color(r, g, b)
 
 
 def draw_heat(heat_field):
@@ -105,11 +106,11 @@ def draw_heat(heat_field):
     :param heat_field: the heat field to be drawn
     :return:
     """
-    normalized_field = normalize_field(heat_field)
+    normalize_field(heat_field)
     index = 0
     for x in range(0, max_block_pos_x, blockSize):
         for y in range(0, max_block_pos_y, blockSize):
-            value = normalized_field[index]
+            value = heat_field[index]
             color = field_to_color(value)
             pygame.draw.rect(SCREEN, color, pygame.Rect(x, y, blockSize - 1, blockSize - 1))
             index += 1

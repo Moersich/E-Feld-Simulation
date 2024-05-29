@@ -1,13 +1,14 @@
 import numpy as np
 
 import visual
+from custom_types import Matrix
 
 max_block_pos_x = visual.max_block_pos_x
 max_block_pos_y = visual.max_block_pos_y
 blockSize = visual.blockSize
 
 
-def calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols):
+def calculate_electric_field(q: float, epsilon_1: float, num_of_rows: int, num_of_cols: int) -> Matrix:
     """
     Calculates the electric field of a block.
     :param q: The charge
