@@ -21,13 +21,15 @@ def calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols):
     for x in range(num_of_rows):
         for y in range(num_of_cols):
             ex, ey = 0, 0
-            for charge in visual.drawn_circles:
-                cx, cy = (charge[0] // blockSize), (charge[1] // blockSize)
+            for idx, charge in enumerate(visual.charges):
+                circle = visual.drawn_circles[idx]
+                cx, cy = (circle[0] // blockSize), (circle[1] // blockSize)
                 dx, dy = cx - x, cy - y
                 distance_squared = dx ** 2 + dy ** 2
                 if distance_squared != 0:
                     r = np.sqrt(distance_squared)
-                    ex += k * q * dx / (epsilon_1 * r ** 3)
-                    ey += k * q * dy / (epsilon_1 * r ** 3)
+                    ex += k * charge * dx / (epsilon_1 * r ** 3)
+                    ey += k * charge * dy / (epsilon_1 * r ** 3)
             field_of_values[x, y] = np.sqrt(ex ** 2 + ey ** 2)
+
     return field_of_values.flatten()
