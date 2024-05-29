@@ -8,7 +8,15 @@ blockSize = visual.blockSize
 
 
 def calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols):
-    heat_field = np.zeros((num_of_rows, num_of_cols))
+    """
+    Calculates the electric field of a block.
+    :param q: The charge
+    :param epsilon_1: permittivity
+    :param num_of_rows: number of rows
+    :param num_of_cols: number of columns
+    :return: a flattened field of values
+    """
+    field_of_values = np.zeros((num_of_rows, num_of_cols))
     k = 8.9875517923e9
     for x in range(num_of_rows):
         for y in range(num_of_cols):
@@ -21,5 +29,5 @@ def calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols):
                     r = np.sqrt(distance_squared)
                     ex += k * q * dx / (epsilon_1 * r ** 3)
                     ey += k * q * dy / (epsilon_1 * r ** 3)
-            heat_field[x, y] = np.sqrt(ex ** 2 + ey ** 2)
-    return heat_field.flatten()
+            field_of_values[x, y] = np.sqrt(ex ** 2 + ey ** 2)
+    return field_of_values.flatten()

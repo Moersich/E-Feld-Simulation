@@ -8,7 +8,6 @@ import main
 WINDOW_WIDTH = main.WINDOW_WIDTH
 WINDOW_HEIGHT = main.WINDOW_HEIGHT
 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
-RED_APPEND = main.RED_APPEND
 RED = (255, 0, 0)
 LEFT = main.LEFT
 BLACK = main.BLACK
@@ -23,6 +22,10 @@ charge = main.q
 
 
 def set_charge():
+    """
+    Sets the position of the charge to be drawn
+    :return: a position within the grid
+    """
     mouse_x, mouse_y = pygame.mouse.get_pos()
     pos = [mouse_x - (mouse_x % blockSize) + blockSize // 2, mouse_y - (mouse_y % blockSize) + blockSize // 2]
     return pos
@@ -32,21 +35,22 @@ drawn_circles = []
 
 
 def draw_all_circles(screen, circles):
+    """
+    Draws all circles again
+    :param screen: the pygame screen where the circles are drawn
+    :param circles: the circles to be drawn
+    :return: all drawn circles
+    """
     for pos in circles:
         pygame.draw.circle(screen, RED, pos, blockSize // 2)
     return drawn_circles
 
 
-def append_hover_charge(screen, circles):
-    pos = set_charge()
-    screen.fill(WHITE)
-    draw_grid()
-    draw_all_circles(screen, circles)
-    if 0 < pos[0] < max_block_pos_x and 0 < pos[1] < max_block_pos_y:
-        pygame.draw.circle(screen, RED_APPEND, set_charge(), blockSize // 2)
-
-
 def draw_charge():
+    """
+    Sets and draws charge on the screen
+    :return: a boolean value to indicate if charge is drawn
+    """
     pos = set_charge()
     if pos[0] < max_block_pos_x and pos[1] < max_block_pos_y:
         drawn_circles.append(pos)
@@ -55,6 +59,10 @@ def draw_charge():
 
 
 def draw_grid():
+    """
+    Draws the grid
+    :return:
+    """
     global blockSize
     for x in range(0, num_of_rows * blockSize, blockSize):
         for y in range(0, num_of_cols * blockSize, blockSize):
@@ -63,6 +71,11 @@ def draw_grid():
 
 
 def normalize_field(heat_field):
+    """
+    normalizes the heat field, to color it in :meth:`field_to_color`
+    :param heat_field: the heat field to be normalized
+    :return: the normalized heat field
+    """
     max_magnitude = np.max(heat_field)
     if max_magnitude != 0:
         return heat_field / max_magnitude
@@ -71,13 +84,18 @@ def normalize_field(heat_field):
 
 
 def field_to_color(value):
+    """
+    Converts the field value into a color
+    :param value: the value to be colored
+    :return: color in r,g,b
+    """
     blue = (0, 0, 255)
     red = (255, 0, 0)
 
     mid = (num_of_cols + num_of_rows) / 3
     scaling_factor = mid
     if value != 0:
-        exponent = -0.2  # You can adjust this value to control the rate
+        exponent = -0.2
         scaled_value = math.pow(math.e, exponent / value * 1 / scaling_factor)
     else:
         scaled_value = 0
@@ -89,6 +107,11 @@ def field_to_color(value):
 
 
 def draw_heat(heat_field):
+    """
+    Draws the heat field into the grid
+    :param heat_field: the heat field to be drawn
+    :return:
+    """
     normalized_field = normalize_field(heat_field)
     index = 0
     for x in range(0, max_block_pos_x, blockSize):
