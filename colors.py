@@ -1,48 +1,35 @@
+from pygame.color import Color
+
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 RED_APPEND = (255, 100, 100)
 
-class Color:
-    def __init__(self, r: int, g: int, b: int):
-        self.r = r
-        self.g = g
-        self.b = b
+def __hue_to_rgb_value(p: float, q: float, t: float) -> float:
+    if t < 0:
+        t += 1
+    if t > 1:
+        t -= 1
+    if t < 1/6:
+        return p + (q - p) * 6 * t
+    if t < 1/2:
+        return q
+    if t < 2/3:
+        return p + (q - p) * (2/3 - t) * 6
+    return p
 
-    def __iter__(self):
-        return iter([self.r, self.g, self.b])
-    
-    def __getitem__(self, index: int):
-        return (self.r, self.g, self.b)[index]
-    
-    def __setitem__(self, index: int, value: int):
-        if index == 0:
-            self.r = value
-        elif index == 1:
-            self.g = value
-        elif index == 2:
-            self.b = value
+def hsl_to_rgb(h: float, s: float, l: float) -> Color:
+    if s == 0:
+        r = g = b = l
+    else:
+        if l < 0.5:
+            q = l * (1 + s)
         else:
-            raise IndexError("Index out of range")
-        
-    def __repr__(self):
-        return f"Color({self.r}, {self.g}, {self.b})"
-    
-    def __str__(self):
-        return f"Color({self.r}, {self.g}, {self.b})"
-    
-    def __eq__(self, other: 'Color') -> bool:
-        return self.r == other.r and self.g == other.g and self.b == other.b
-    
-    def __ne__(self, other: 'Color') -> bool:
-        return not self.__eq__(other)
-    
-    def __add__(self, other: 'Color') -> 'Color':
-        return Color(self.r + other.r, self.g + other.g, self.b + other.b)
-    
-    def __sub__(self, other: 'Color') -> 'Color':
-        return Color(self.r - other.r, self.g - other.g, self.b - other.b)
-    
-    def __mul__(self, other: float) -> 'Color':
-        return Color(self.r * other, self.g * other, self.b * other)
+            q = l + s - l * s
+        p = 2 * l - q
+        r = __hue_to_rgb_value(p, q, h + 1/3)
+        g = __hue_to_rgb_value(p, q, h)
+        b = __hue_to_rgb_value(p, q, h - 1/3)
+
+    return Color(round(r * 255), round(g * 255), round(b * 255))

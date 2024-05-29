@@ -2,9 +2,9 @@ import math
 
 import numpy as np
 import pygame
+from pygame.color import Color
 
 import colors
-from colors import Color
 
 import setup
 
@@ -60,7 +60,6 @@ def draw_grid():
     Draws the grid
     :return:
     """
-    global blockSize
     for x in range(0, setup.num_of_rows * blockSize, blockSize):
         for y in range(0, setup.num_of_cols * blockSize, blockSize):
             rect = pygame.Rect(x, y, blockSize, blockSize)
@@ -97,10 +96,10 @@ def field_to_color(value: float) -> Color:
     r = int(blue[0] + (red[0] - blue[0]) * scaled_value)
     g = int(blue[1] + (red[1] - blue[1]) * scaled_value)
     b = int(blue[2] + (red[2] - blue[2]) * scaled_value)
-    return Color(r, g, b)
+    return r, g, b
 
 
-def draw_heat(heat_field):
+def draw_heat(heat_field: Matrix):
     """
     Draws the heat field into the grid
     :param heat_field: the heat field to be drawn
