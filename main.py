@@ -5,18 +5,9 @@ import pygame
 import formeln
 import visual
 
-BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)
-WHITE = (255, 255, 255)
-RED_APPEND = (255, 100, 100)
-WINDOW_HEIGHT = 400
-WINDOW_WIDTH = 400
-LEFT = 1
-num_of_rows = 40
-num_of_cols = 40
-q = 1 * 10 ** (-6)
-epsilon_1 = 1
-
+import colors
+import input
+import setup
 
 def main():
     global SCREEN, CLOCK
@@ -24,10 +15,10 @@ def main():
 
 if __name__ == '__main__':
     pygame.init()
-    SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
+    SCREEN = pygame.display.set_mode((setup.WINDOW_WIDTH, setup.WINDOW_HEIGHT), pygame.RESIZABLE)
     CLOCK = pygame.time.Clock()
-    SCREEN.fill(WHITE)
-    heat_field = formeln.calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols)
+    SCREEN.fill(colors.WHITE)
+    heat_field = formeln.calculate_electric_field(setup.q, setup.epsilon_1, setup.num_of_rows, setup.num_of_cols)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -39,9 +30,9 @@ if __name__ == '__main__':
                 visual.draw_grid()
             if event.type == pygame.FULLSCREEN:
                 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == input.LEFT_MOUSE_BUTTON:
                 visual.draw_charge()
-                heat_field = formeln.calculate_electric_field(q, epsilon_1, num_of_rows, num_of_cols)
+                heat_field = formeln.calculate_electric_field(setup.q, setup.epsilon_1, setup.num_of_rows, setup.num_of_cols)
 
         visual.draw_heat(heat_field)
         visual.draw_grid()

@@ -3,22 +3,18 @@ import math
 import numpy as np
 import pygame
 
-import main
+import colors
+import input
+import setup
 
-WINDOW_WIDTH = main.WINDOW_WIDTH
-WINDOW_HEIGHT = main.WINDOW_HEIGHT
+WINDOW_WIDTH = setup.WINDOW_WIDTH
+WINDOW_HEIGHT = setup.WINDOW_HEIGHT
 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
-RED = (255, 0, 0)
-LEFT = main.LEFT
-BLACK = main.BLACK
 blockSize = 20
-num_of_rows = main.num_of_rows
-num_of_cols = main.num_of_cols
-max_block_pos_y = num_of_cols * blockSize
-max_block_pos_x = num_of_rows * blockSize
-BLUE = main.BLUE
-WHITE = main.WHITE
-charge = main.q
+
+max_block_pos_y = setup.num_of_cols * blockSize
+max_block_pos_x = setup.num_of_rows * blockSize
+charge = setup.q
 
 
 def set_charge():
@@ -42,7 +38,7 @@ def draw_all_circles(screen, circles):
     :return: all drawn circles
     """
     for pos in circles:
-        pygame.draw.circle(screen, RED, pos, blockSize // 2)
+        pygame.draw.circle(screen, colors.RED, pos, blockSize // 2)
     return drawn_circles
 
 
@@ -54,7 +50,7 @@ def draw_charge():
     pos = set_charge()
     if pos[0] < max_block_pos_x and pos[1] < max_block_pos_y:
         drawn_circles.append(pos)
-        pygame.draw.circle(SCREEN, RED, pos, blockSize // 2)
+        pygame.draw.circle(SCREEN, colors.RED, pos, blockSize // 2)
     return True
 
 
@@ -64,10 +60,10 @@ def draw_grid():
     :return:
     """
     global blockSize
-    for x in range(0, num_of_rows * blockSize, blockSize):
-        for y in range(0, num_of_cols * blockSize, blockSize):
+    for x in range(0, setup.num_of_rows * blockSize, blockSize):
+        for y in range(0, setup.num_of_cols * blockSize, blockSize):
             rect = pygame.Rect(x, y, blockSize, blockSize)
-            pygame.draw.rect(SCREEN, BLACK, rect, 1)
+            pygame.draw.rect(SCREEN, colors.BLACK, rect, 1)
 
 
 def normalize_field(heat_field):
@@ -92,7 +88,7 @@ def field_to_color(value):
     blue = (0, 0, 255)
     red = (255, 0, 0)
 
-    mid = (num_of_cols + num_of_rows) / 3
+    mid = (setup.num_of_cols + setup.num_of_rows) / 3
     scaling_factor = mid
     if value != 0:
         exponent = -0.2
